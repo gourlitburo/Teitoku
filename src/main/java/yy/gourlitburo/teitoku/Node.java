@@ -7,10 +7,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class Node implements Parent {
-    public NodeType type;
-    public String name;
-    public Executor executor = null;
-    public List<Node> children = new ArrayList<>(8);
+    NodeType type;
+    String name;
+    Executor executor = null;
+    List<Node> children = new ArrayList<>(8);
+    boolean acceptsArguments = true;
+
+    /* constructors */
 
     public Node() {
         this.type = NodeType.INNER;
@@ -34,6 +37,8 @@ public class Node implements Parent {
         this.executor = executor;
     }
 
+    /* methods */
+
     public void execute(CommandSender sender, Command command, String alias, String[] args) throws UnsupportedOperationException {
         if (this.type != NodeType.EXECUTABLE) throw new UnsupportedOperationException();
 
@@ -42,5 +47,35 @@ public class Node implements Parent {
 
     public void addChild(Node child) {
         children.add(child);
+    }
+
+    /* get/set */
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Executor getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
+    }
+
+    public List<Node> getChildren() {
+        return children;
+    }
+
+    public boolean isAcceptsArguments() {
+        return acceptsArguments;
+    }
+
+    public void setAcceptsArguments(boolean acceptsArguments) {
+        this.acceptsArguments = acceptsArguments;
     }
 }
