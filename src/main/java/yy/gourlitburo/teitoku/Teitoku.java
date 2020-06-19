@@ -57,7 +57,7 @@ public class Teitoku implements CommandExecutor, TabCompleter, Parent {
         Pair<Node, String[]> matchResult = getMatchingNode(args);
         Node matchingNode = matchResult.first;
 
-        if (matchingNode != null && matchingNode.type == NodeType.EXECUTABLE) {
+        if (matchingNode != null && matchingNode.isExecutable()) {
             matchingNode.execute(sender, command, alias, matchResult.second);
             return true;
         } else {
