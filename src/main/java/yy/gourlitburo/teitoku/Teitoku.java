@@ -69,8 +69,7 @@ public class Teitoku implements CommandExecutor, TabCompleter, Parent {
         List<String> suggestions = new ArrayList<>();
 
         String lastArgPartial = args[args.length - 1];
-        List<String> prevArgs = new ArrayList<>(Arrays.asList(args));
-        prevArgs.subList(0, prevArgs.size() - 1);
+        List<String> prevArgs = new ArrayList<>(Arrays.asList(args)).subList(0, args.length - 1);
 
         Pair<Node, List<String>> matchResult = getMatchingNode(prevArgs);
         Node matchingNode = matchResult.first;
