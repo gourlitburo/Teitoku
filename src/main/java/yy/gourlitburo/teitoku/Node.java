@@ -11,7 +11,6 @@ public class Node implements Parent {
     String name;
     Executor executor = null;
     List<Node> children = new ArrayList<>(8);
-    boolean acceptsArguments = true;
 
     /* constructors */
 
@@ -69,13 +68,5 @@ public class Node implements Parent {
 
     public List<Node> getChildren() {
         return children;
-    }
-
-    public boolean isAcceptsArguments() {
-        return acceptsArguments;
-    }
-
-    public void setAcceptsArguments(boolean acceptsArguments) {
-        this.acceptsArguments = acceptsArguments;
     }
 }
