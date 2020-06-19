@@ -18,7 +18,7 @@ public class Node implements Parent {
     }
 
     public Node(Executor executor) {
-        this.type = NodeType.LEAF;
+        this.type = NodeType.EXECUTABLE;
         this.name = "";
         this.executor = executor;
     }
@@ -29,13 +29,13 @@ public class Node implements Parent {
     }
 
     public Node(String name, Executor executor) {
-        this.type = NodeType.LEAF;
+        this.type = NodeType.EXECUTABLE;
         this.name = name;
         this.executor = executor;
     }
 
     public void execute(CommandSender sender, Command command, String alias, String[] args) throws UnsupportedOperationException {
-        if (this.type != NodeType.LEAF) throw new UnsupportedOperationException();
+        if (this.type != NodeType.EXECUTABLE) throw new UnsupportedOperationException();
 
         this.executor.run(sender, command, alias, args);
     }

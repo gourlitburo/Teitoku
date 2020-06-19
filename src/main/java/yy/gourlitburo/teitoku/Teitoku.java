@@ -41,8 +41,12 @@ public class Teitoku implements CommandExecutor, Parent {
                 }
             }
             if (matchingNode == null) {
-                String[] argsArray = argsList.toArray(new String[argsList.size()]);
-                curNode.execute(sender, command, alias, argsArray);
+                if (curNode.type == NodeType.EXECUTABLE) {
+                    String[] argsArray = argsList.toArray(new String[argsList.size()]);
+                    curNode.execute(sender, command, alias, argsArray);
+                } else {
+                    return false;
+                }
                 break;
             } else {
                 argsList.remove(0);
