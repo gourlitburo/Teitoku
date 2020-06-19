@@ -10,8 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 public class Teitoku implements CommandExecutor, TabCompleter, Parent {
-    /* members */
-
     private Node root;
 
     /**
