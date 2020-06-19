@@ -1,6 +1,6 @@
 package yy.gourlitburo.teitoku;
 
-public enum NodeType {
+enum NodeType {
     INNER,
     EXECUTABLE
 }

@@ -1,5 +1,5 @@
 package yy.gourlitburo.teitoku;
 
-public interface Parent {
+interface Parent {
     public void addChild(Node child);
 }
