@@ -7,17 +7,12 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
-public class Teitoku implements CommandExecutor, Parent {
+public class Teitoku implements CommandExecutor, TabCompleter, Parent {
     /* members */
 
     private Node root;
-    public void setRoot(Node child) {
-        this.root = child;
-    }
-    public Node getRoot() {
-        return this.root;
-    }
 
     /**
      * Add a child to the root Node.
@@ -27,8 +22,7 @@ public class Teitoku implements CommandExecutor, Parent {
         root.addChild(child);
     }
 
-    public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> argsList = new ArrayList<>(Arrays.asList(args));
+    private Pair<Node, List<String>> getMatchingNode(List<String> argsList) {
         Node curNode = root;
 
         while (!argsList.isEmpty()) {
@@ -41,19 +35,64 @@ public class Teitoku implements CommandExecutor, Parent {
                 }
             }
             if (matchingNode == null) {
-                if (curNode.type == NodeType.EXECUTABLE && curNode.acceptsArguments) {
-                    String[] argsArray = argsList.toArray(new String[argsList.size()]);
-                    curNode.execute(sender, command, alias, argsArray);
-                } else {
-                    return false;
-                }
-                break;
+                return new Pair<>(curNode, argsList);
             } else {
                 argsList.remove(0);
                 curNode = matchingNode;
             }
         }
 
-        return true;
+        return new Pair<>(curNode, argsList);
+    }
+
+    private Pair<Node, String[]> getMatchingNode(String[] args) {
+        List<String> argsList = new ArrayList<>(Arrays.asList(args));
+        Pair<Node, List<String>> matchResult = getMatchingNode(argsList);
+
+        String[] argsArray = matchResult.second.toArray(new String[matchResult.second.size()]);
+        return new Pair<>(matchResult.first, argsArray);
+    }
+
+    public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
+        Pair<Node, String[]> matchResult = getMatchingNode(args);
+        Node matchingNode = matchResult.first;
+
+        if (matchingNode != null && matchingNode.type == NodeType.EXECUTABLE && matchingNode.acceptsArguments) {
+            matchingNode.execute(sender, command, alias, matchResult.second);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        String lastArgPartial = args[args.length - 1];
+        List<String> prevArgs = new ArrayList<>(Arrays.asList(args));
+        prevArgs.subList(0, prevArgs.size() - 1);
+
+        Pair<Node, List<String>> matchResult = getMatchingNode(prevArgs);
+        Node matchingNode = matchResult.first;
+
+        if (matchingNode != null) {
+            for (Node child : matchingNode.getChildren()) {
+                if (child.name.startsWith(lastArgPartial)) {
+                    suggestions.add(child.name);
+                }
+            }
+        }
+        
+        return suggestions;
+    }
+
+    /* get/set */
+
+    public Node getRoot() {
+        return this.root;
+    }
+
+    public void setRoot(Node child) {
+        this.root = child;
     }
 }
